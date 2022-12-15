@@ -17,18 +17,18 @@ describe('signup', () => {
             'email must not be empty'
         );
     });
-    it('should return an exception if no password is given', () => {
+    it('should return an exception if password is weak', () => {
         const userRepository = new InMemoryUserRepository();
         const signup = new Signup(userRepository);
-        expect(() => signup.execute('valid@email.com', '')).toThrowError(
-            'password must not be empty'
+        expect(() => signup.execute('valid@email.com', 'pass')).toThrowError(
+            'password is not strong enough: min, uppercase'
         );
     });
     it('should return an error if a the email has an invalid format', () => {
         const userRepository = new InMemoryUserRepository();
         const signup = new Signup(userRepository);
         const email = 'invalidemail.com';
-        const password = 'password';
+        const password = 'Password';
         expect(() => signup.execute(email, password)).toThrowError(
             'email is not valid'
         );
@@ -37,7 +37,7 @@ describe('signup', () => {
         const userRepository = new InMemoryUserRepository();
         const signup = new Signup(userRepository);
         const email = 'valid@email.com';
-        const password = 'password';
+        const password = 'Password';
         signup.execute(email, password);
         expect(userRepository.findUserByEmail(new Email(email))).toBeDefined();
     });
@@ -45,7 +45,7 @@ describe('signup', () => {
         const userRepository = new InMemoryUserRepository();
         const signup = new Signup(userRepository);
         const email = 'valid@email.com';
-        const password = 'password';
+        const password = 'Password';
         const user = signup.execute(email, password);
         expect(user.getPassword().getValue()).not.toBe(
             new Password(password).getValue()
@@ -55,7 +55,7 @@ describe('signup', () => {
     it('should throw an exception if a user already exists', () => {
         const userRepository = new InMemoryUserRepository();
         const email = 'valid@email.com';
-        const password = 'password';
+        const password = 'Password';
         userRepository.addUser(User.create(email, password));
         const signup = new Signup(userRepository);
         expect(() => signup.execute(email, password)).toThrowError(

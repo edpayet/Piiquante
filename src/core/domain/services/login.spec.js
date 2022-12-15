@@ -20,13 +20,13 @@ describe('login', () => {
         const userRepository = new InMemoryUserRepository();
         const login = new Login(userRepository);
         expect(() =>
-            login.execute('nonvalid@email.com', 'password')
+            login.execute('nonvalid@email.com', 'Password')
         ).toThrowError('The email/password pair is not correct');
     });
     it('should not throw an error if a user exists', () => {
         const userRepository = new InMemoryUserRepository();
         const email = 'valid@email.com';
-        const password = 'password';
+        const password = 'Password';
         userRepository.addUser(User.create(email, password));
         const login = new Login(userRepository);
         expect(() => login.execute(email, password)).not.toThrowError();
@@ -35,7 +35,7 @@ describe('login', () => {
         const userRepository = new InMemoryUserRepository();
         const login = new Login(userRepository);
         const email = 'valid@email.com';
-        const password = 'password';
+        const password = 'Password';
         userRepository.addUser(User.create(email, password));
         const user = login.execute(email, password);
         expect(user).toBeInstanceOf(User);
@@ -46,17 +46,18 @@ describe('login', () => {
         const userRepository = new InMemoryUserRepository();
         const login = new Login(userRepository);
         const email = 'invalidemail.com';
-        const password = 'password';
+        const password = 'Password';
         expect(() => login.execute(email, password)).toThrowError(
             'email is not valid'
         );
     });
     it('should return an error if the pair email/password is not correct', () => {
         const userRepository = new InMemoryUserRepository();
-        userRepository.addUser(User.create('email@exists.com', 'password'));
         const login = new Login(userRepository);
-        expect(() =>
-            login.execute('email@exists.com', 'wrongpassword')
-        ).toThrowError('The email/password pair is not correct');
+        const email = 'valid@email.com';
+        userRepository.addUser(User.create(email, 'Password'));
+        expect(() => login.execute(email, 'Wrongpassword')).toThrowError(
+            'The email/password pair is not correct'
+        );
     });
 });
