@@ -1,6 +1,4 @@
-const express = require('express');
-require('dotenv').config();
-const http = require('http');
+import http from 'http';
 
 import app from './app';
 
@@ -20,11 +18,9 @@ const errorHandler = (error) => {
         case 'EACCES':
             console.error(bind + ' requires elevated privileges.');
             process.exit(1);
-            break;
         case 'EADDRINUSE':
             console.error(bind + ' is already in use.');
             process.exit(1);
-            break;
         default:
             throw error;
     }

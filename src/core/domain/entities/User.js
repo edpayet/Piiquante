@@ -1,5 +1,6 @@
 import { Email } from '../valueObjects/Email';
 import { Password } from '../valueObjects/Password';
+import { nanoid } from 'nanoid'
 
 /* eslint-disable import/prefer-default-export */
 export class User {
@@ -7,10 +8,6 @@ export class User {
         this.id = id;
         this.email = email;
         this.password = password;
-    }
-
-    static createId() {
-        return Math.floor(Math.random() * Date.now());
     }
 
     getId() {
@@ -34,8 +31,9 @@ export class User {
     }
 
     static create(email, password) {
+        const id = nanoid();
         return new User(
-            this.createId(),
+            id,
             new Email(email),
             new Password(password, true)
         );
