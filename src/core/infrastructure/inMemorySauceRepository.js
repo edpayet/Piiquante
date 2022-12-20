@@ -1,9 +1,13 @@
 export class InMemorySauceRepository {
-    constructor(sauces) {
-        this.sauces = sauces;
+    constructor() {
+        this.sauces = [];
     }
 
     getSauces() {
         return this.sauces;
+    }
+
+    addSauce(sauce) {
+        this.sauces.push(sauce);
     }
 }

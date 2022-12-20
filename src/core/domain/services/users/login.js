@@ -1,7 +1,6 @@
-import * as jwt from 'jsonwebtoken';
-
-import { Email } from '../valueObjects/Email';
-import { Password } from '../valueObjects/Password';
+import { Email } from '../../valueObjects/Email';
+import { Password } from '../../valueObjects/Password';
+import { Token } from '../../valueObjects/Token';
 
 export class Login {
     constructor(userRepository) {
@@ -16,17 +15,7 @@ export class Login {
         if (!userFound.hasPassword(new Password(password))) {
             throw new Error('The email/password pair is not correct');
         }
-        const token = this.createToken(userFound.id);
-        return { userFound, token };
-    }
-
-    createToken(userId) {
-        const token = {
-            userId,
-            token: jwt.sign({ userId }, '8j9QUGDEQ@U48BHsmhZAzvpcRa-rdW', {
-                expiresIn: '24h',
-            }),
-        };
-        return token;
+        const token = new Token(userFound.getId());
+        return { user: userFound, token: token.getValue() };
     }
 }

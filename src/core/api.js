@@ -1,5 +1,5 @@
-import { Login } from './domain/services/login';
-import { Signup } from './domain/services/signup';
+import { Login } from './domain/services/users/login';
+import { Signup } from './domain/services/users/signup';
 import { InMemoryUserRepository } from './infrastructure/inMemoryUserRepository';
 
 const userRepository = new InMemoryUserRepository();

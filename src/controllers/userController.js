@@ -1,11 +1,22 @@
+const status = require('http-status');
 import { signUpUser, logInUser } from '../core/api';
 
-const signup = async (req) => {
+const signup = async (req, res, next) => {
     const { email, password } = req.body;
-    await signUpUser.execute({ email, password });
+    console.log(req.body);
+    console.log(`email: ${email}, password: ${password}`);
+    try {
+        const { user, token } = await signUpUser.execute({ email, password });
+        res.status(status.CREATED).json({
+            userId: user.getId(),
+            token,
+        });
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
 };
 
-const login = async (req, res) => {
+const login = async (req, res, next) => {
     const { email, password } = req.body;
     try {
         const user = await logInUser.execute(email, password);
@@ -17,4 +28,4 @@ const login = async (req, res) => {
     }
 };
 
-export { signup, login };
+module.exports = { signup, login };

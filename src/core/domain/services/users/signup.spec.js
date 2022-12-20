@@ -1,7 +1,7 @@
-import { User } from '../entities/User';
-import { Email } from '../valueObjects/Email';
-import { Password } from '../valueObjects/Password';
-import { InMemoryUserRepository } from '../../infrastructure/inMemoryUserRepository';
+import { User } from '../../entities/User';
+import { Email } from '../../valueObjects/Email';
+import { Password } from '../../valueObjects/Password';
+import { InMemoryUserRepository } from '../../../infrastructure/inMemoryUserRepository';
 import { Signup } from './signup';
 
 describe('signup', () => {
@@ -17,7 +17,7 @@ describe('signup', () => {
             'email must not be empty'
         );
     });
-    it('should return an exception if password is weak', () => {
+    it('should return an error if password is weak', () => {
         const userRepository = new InMemoryUserRepository();
         const signup = new Signup(userRepository);
         expect(() => signup.execute('valid@email.com', 'pass')).toThrowError(
@@ -33,7 +33,7 @@ describe('signup', () => {
             'email is not valid'
         );
     });
-    it('should add a user when a valid email is given', () => {
+    it('should add a user when a valid email and password is given', () => {
         const userRepository = new InMemoryUserRepository();
         const signup = new Signup(userRepository);
         const email = 'valid@email.com';

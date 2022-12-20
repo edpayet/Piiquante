@@ -1,30 +1,43 @@
-import { Email } from "../valueObjects/Email";
-import { Password } from "../valueObjects/Password";
+import { Email } from '../valueObjects/Email';
+import { Password } from '../valueObjects/Password';
 
 /* eslint-disable import/prefer-default-export */
 export class User {
-  constructor(email, password) {
-    this.email = email;
-    this.password = password;
-  }
+    constructor(id, email, password) {
+        this.id = id;
+        this.email = email;
+        this.password = password;
+    }
 
-  getEmail() {
-    return this.email;
-  }
+    static createId() {
+        return Math.floor(Math.random() * Date.now());
+    }
 
-  getPassword() {
-    return this.password;
-  }
+    getId() {
+        return this.id;
+    }
 
-  hasEmail(email) {
-    return this.email.isEqual(email);
-  }
+    getEmail() {
+        return this.email;
+    }
 
-  hasPassword(password) {
-    return this.password.isEqual(password);
-  }
+    getPassword() {
+        return this.password;
+    }
 
-  static create(email, password) {
-    return new User(new Email(email), new Password(password, true))
-  }
+    hasEmail(email) {
+        return this.email.isEqual(email);
+    }
+
+    hasPassword(password) {
+        return this.password.isEqual(password);
+    }
+
+    static create(email, password) {
+        return new User(
+            this.createId(),
+            new Email(email),
+            new Password(password, true)
+        );
+    }
 }

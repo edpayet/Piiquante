@@ -31,7 +31,6 @@ export class Password {
     // eslint-disable-next-line class-methods-use-this
     validate(password) {
         const errors = schema.validate(password, { list: true });
-        console.log('-->', `${errors.join(', ').toString()}`);
         if (errors.length > 0) {
             throw new Error(
                 `password is not strong enough: ${errors.join(', ').toString()}`

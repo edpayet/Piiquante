@@ -1,5 +1,5 @@
-import { User } from '../entities/User';
-import { Email } from '../valueObjects/Email';
+import { User } from '../../entities/User';
+import { Email } from '../../valueObjects/Email';
 
 export class Signup {
     constructor(userRepository) {
@@ -10,6 +10,7 @@ export class Signup {
         if (this.userRepository.findUserByEmail(new Email(email))) {
             throw new Error('user already exists');
         }
+        console.log('--> signup', email, password);
         const user = User.create(email, password);
         this.userRepository.addUser(user);
         return user;

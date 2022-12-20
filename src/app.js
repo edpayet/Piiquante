@@ -1,15 +1,18 @@
 import express from 'express';
 import mongoose from 'mongoose';
+require('dotenv').config();
 
 import userRoutes from './routes/user';
 
 const app = express();
 
+mongoose.set('strictQuery', false);
+
 mongoose
-    .connect(
-        'mongodb+srv://edb:grot.GHETTO6vitalize9gild@testandlearn.m0lqjyu.mongodb.net/?retryWrites=true&w=majority',
-        { useNewUrlParser: true, useUnifiedTopology: true }
-    )
+    .connect(process.env.MONGO_URL, {
+        useNewUrlParser: true,
+        useUnifiedTopology: true,
+    })
     .then(() => console.log('Connexion à MongoDB réussie !'))
     .catch(() => console.log('Connexion à MongoDB échouée !'));
 
