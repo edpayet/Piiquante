@@ -2,7 +2,6 @@ import { InMemoryUserRepository } from '../../../infrastructure/inMemoryUserRepo
 import { User } from '../../entities/User';
 import { Email } from '../../valueObjects/Email';
 import { Password } from '../../valueObjects/Password';
-import { Token } from '../../valueObjects/Token';
 import { Login } from './login';
 
 describe('login', () => {
