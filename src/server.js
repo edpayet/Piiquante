@@ -1,4 +1,5 @@
 import http from 'http';
+import mongoose from 'mongoose';
 
 import app from './app';
 
@@ -13,20 +14,33 @@ const errorHandler = (error) => {
     }
     const address = server.address();
     const bind =
-        typeof address === 'string' ? 'pipe ' + address : 'port: ' + port;
+        typeof address === 'string' ? `pipe ${address}` : `port: ${port}`;
     switch (error.code) {
         case 'EACCES':
-            console.error(bind + ' requires elevated privileges.');
+            console.error(`${bind} requires elevated privileges.`);
             process.exit(1);
+            break;
         case 'EADDRINUSE':
-            console.error(bind + ' is already in use.');
+            console.error(`${bind} is already in use.`);
             process.exit(1);
+            break;
         default:
             throw error;
     }
 };
 
 server.on('error', errorHandler);
+
+
+mongoose.set('strictQuery', false);
+
+mongoose
+    .connect(process.env.MONGO_URL, {
+        useNewUrlParser: true,
+        useUnifiedTopology: true,
+    })
+    .then(() => console.log('Connexion à MongoDB réussie !'))
+    .catch(() => console.log('Connexion à MongoDB échouée !'));
 
 server.on('listening', () => {
     const address = server.address();

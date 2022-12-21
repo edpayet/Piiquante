@@ -1,19 +1,10 @@
 import express from 'express';
-import mongoose from 'mongoose';
+import dotenv from 'dotenv';
 
 import userRoutes from './routes/user';
 
 const app = express();
-
-mongoose.set('strictQuery', false);
-
-mongoose
-    .connect(process.env.MONGO_URL, {
-        useNewUrlParser: true,
-        useUnifiedTopology: true,
-    })
-    .then(() => console.log('Connexion à MongoDB réussie !'))
-    .catch(() => console.log('Connexion à MongoDB échouée !'));
+dotenv.config();
 
 app.use(express.json());
 

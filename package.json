@@ -10,7 +10,6 @@
         "clean": "rimraf dist",
         "start": "nodemon --exec node_modules/.bin/babel-node ./src/server.js"
     },
-    "type": "module",
     "author": "",
     "license": "ISC",
     "devDependencies": {

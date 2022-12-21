@@ -1,6 +1,7 @@
+import { nanoid } from 'nanoid';
+
 import { Email } from '../valueObjects/Email';
 import { Password } from '../valueObjects/Password';
-import { nanoid } from 'nanoid'
 
 /* eslint-disable import/prefer-default-export */
 export class User {

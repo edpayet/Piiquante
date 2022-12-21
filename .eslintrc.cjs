@@ -2,8 +2,10 @@ module.exports = {
     env: {
         browser: true,
         es2021: true,
+        'jest/globals': true,
     },
     extends: ['airbnb-base', 'prettier'],
+    plugins: ["jest"],
     overrides: [],
     parserOptions: {
         ecmaVersion: 'latest',
@@ -11,6 +13,6 @@ module.exports = {
     },
     rules: {
         'max-classes-per-file': ['error', 7],
-        'prefer-default-export': false,
+         'import/prefer-default-export': 'off',
     },
 };
