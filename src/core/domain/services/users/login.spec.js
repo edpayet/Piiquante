@@ -39,9 +39,9 @@ describe('login', () => {
         userRepository.addUser(User.create(email, password));
         const { user, token } = login.execute(email, password);
         expect(user.getId()).not.toBeNull();
-        expect(user.hasEmail(new Email(email))).toBeTruthy;
-        expect(user.hasPassword(new Password(password))).toBeTruthy;
-        expect(token).not.toBeNull();
+        expect(user.hasEmail(new Email(email))).toBeTruthy();
+        expect(user.hasPassword(new Password(password))).toBeTruthy();
+        expect(token).toBeTruthy();
     });
     it('should return an error if a the email has an invalid format', () => {
         const userRepository = new InMemoryUserRepository();

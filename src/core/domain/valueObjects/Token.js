@@ -7,12 +7,17 @@ export class Token {
 
     // eslint-disable-next-line class-methods-use-this
     createToken(userId) {
-        const token = {
-            userId,
-            token: jwt.sign({ userId }, '8j9QUGDEQ@U48BHsmhZAzvpcRa-rdW', {
-                expiresIn: '24h',
-            }),
-        };
+        // Cahier des charges "un token web JSON signé (contenant également l'_id de l'utilisateur)" ?
+        // const token = {
+        //     userId,
+        //     token: jwt.sign({ userId }, '8j9QUGDEQ@U48BHsmhZAzvpcRa-rdW', {
+        //         expiresIn: '24h',
+        //     }),
+        // };
+        // return token;
+        const token = jwt.sign({ userId }, '8j9QUGDEQ@U48BHsmhZAzvpcRa-rdW', {
+            expiresIn: '24h',
+        });
         return token;
     }
 
