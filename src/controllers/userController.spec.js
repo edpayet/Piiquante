@@ -1,7 +1,7 @@
 import request from "supertest";
 import app from '../app';
 
-describe("Test example", () => {
+describe("User tests", () => {
   
   describe('POST /api/auth/signup', () => {
     it('responds with json when email and password are valid', async () => {
@@ -11,6 +11,7 @@ describe("Test example", () => {
         .send({email: "john@email.com", password: "Password"});
 
         expect(response.status).toBe(201);
+        expect(response.headers['content-type']).toEqual(expect.stringContaining('json'))
     });
 
     it('throws an error when signing up a user already signed', async () => {
