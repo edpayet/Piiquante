@@ -1,8 +1,8 @@
 /* eslint-disable import/prefer-default-export */
-import passwordValidator from 'password-validator';
+import PasswordValidator from 'password-validator';
 import bcrypt from 'bcrypt';
 
-const schema = new passwordValidator();
+const schema = new PasswordValidator();
 
 schema
     .is()
