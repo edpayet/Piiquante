@@ -1,12 +1,10 @@
-const jwt = require('jsonwebtoken');
 
-module.exports = (req, res, next) => {
+import { Token } from '../core/domain/valueObjects/Token';
+
+export function Authenticate(req, res, next) {
     try {
-        const token = req.headers.authorization.split(' ')[1];
-        const decodedToken = jwt.verify(
-            token,
-            '8j9QUGDEQ@U48BHsmhZAzvpcRa-rdW'
-        );
+        const token = new Token(req.headers.authorization.split(' ')[1]);
+        const decodedToken = token.decode();
         const { userId } = decodedToken.userId;
         req.auth = {
             userId,

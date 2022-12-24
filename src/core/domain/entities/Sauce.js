@@ -63,6 +63,7 @@ export class Sauce {
         return this.usersDisliked;
     }
 
+    // To create a Sauce, it needs at least a userID, the rest is initialized
     static create(userId, manufacturer = '', description = '', mainPepper = '', imageUrl = '', heat = 0, likes = 0, dislikes = 0, usersLiked = [], usersDisliked = []) {
         const id = nanoid();
         return new Sauce(

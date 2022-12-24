@@ -1,5 +1,8 @@
 import * as jwt from 'jsonwebtoken';
 
+const key = '8j9QUGDEQ@U48BHsmhZAzvpcRa-rdW';
+const expiresIn = '24h'
+
 export class Token {
     constructor(userId) {
         this.value = this.createToken(userId);
@@ -10,13 +13,13 @@ export class Token {
         // Cahier des charges "un token web JSON signé (contenant également l'_id de l'utilisateur)" ?
         // const token = {
         //     userId,
-        //     token: jwt.sign({ userId }, '8j9QUGDEQ@U48BHsmhZAzvpcRa-rdW', {
-        //         expiresIn: '24h',
+        //     token: jwt.sign({ userId }, key, {
+        //         expiresIn,
         //     }),
         // };
         // return token;
-        const token = jwt.sign({ userId }, '8j9QUGDEQ@U48BHsmhZAzvpcRa-rdW', {
-            expiresIn: '24h',
+        const token = jwt.sign({ userId }, key, {
+            expiresIn,
         });
         return token;
     }
@@ -27,5 +30,9 @@ export class Token {
 
     isEqual(token) {
         return this.value === token.getValue();
+    }
+
+    decode() {
+        return jwt.verify(this.value, key);
     }
 }

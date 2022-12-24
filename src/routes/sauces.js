@@ -1,6 +1,6 @@
 import express from 'express';
 
-import auth from '../middlewares/auth';
+import { Authenticate as auth } from '../middlewares/auth';
 import { getAll, addOne } from '../controllers/saucesController';
 
 const multer = require('../middlewares/multer-config');
