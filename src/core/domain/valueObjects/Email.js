@@ -12,11 +12,6 @@ export class Email {
         if (email.length === 0) {
             throw new Error('email must not be empty');
         }
-        console.log(
-            'emailValidator -->',
-            email,
-            EmailValidator.validate(email)
-        );
         if (!EmailValidator.validate(email)) {
             throw new Error('email is not valid');
         }

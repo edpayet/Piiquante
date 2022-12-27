@@ -5,9 +5,10 @@ import { getSauces, addSauce } from '../core/api';
 export const getAll = async (req, res) => {
     try {
         const sauces = await getSauces.execute();
-        res.status(status.OK).json(sauces);
+        res.status(200).json(sauces);
     }
     catch (error) {
+        console.log(error);
         res.status(500).json({ message: error.message });
     }
 }
@@ -15,10 +16,7 @@ export const getAll = async (req, res) => {
 export const addOne = async (req, res) => {
     try {
         const { _userId, ...sauceObject } = req.body.sauce;
-        if (!req.auth.userId) {
-            res.status(500).json({message: 'The user is not identified'});
-        }
-        const { userId } = req.auth.userId;
+        const { userId } = req.auth;
         console.log('userId --> ', userId);
         if (!userId) {
             res.status(500).json({message: 'The user is not identified'});
@@ -36,6 +34,7 @@ export const addOne = async (req, res) => {
         });
     }
  catch (error) {
+    console.log(error);
     res.status(500).json({ message: error.message });
 }
 }

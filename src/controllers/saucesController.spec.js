@@ -14,7 +14,7 @@ describe("Sauce tests", () => {
           });
     });
     describe('POST /api/sauces', () => {
-        it('responds with an error message if trying to add a sauce without being authenticated', async () => {
+        it('responds with an error if trying to add a sauce without being authenticated', async () => {
             const response = await request(app)
               .post('/api/sauces')
               .set('Accept', 'application/json')
@@ -22,19 +22,18 @@ describe("Sauce tests", () => {
       
               expect(response.status).toBe(401);
           });
-        it('responds with an error message if trying to add a sauce without a valid token', async () => {
+        it('responds with an error if trying to add a sauce without a valid token', async () => {
             const response = await request(app)
               .post('/api/sauces')
-              .set('Accept', 'application/json')
               .set('Authorization', `Bearer ${'nonValidToken'}`) 
               .send({sauce: {manufacturer: "MANUFACTURER", description: "This is a description", heat: 1}});
       
-              expect(response.status).toBe(500);
-              expect(response.body.message).toBe('The user is not identified');
+              expect(response.status).toBe(401);
           });
         it('responds with json when a sauce is sent', async () => {
             const userId = 'USERID1';
             const token = new Token(userId);
+            console.log('test valid token: ', token.value);
             const response = await request(app)
               .post('/api/sauces')
               .set('Authorization', `Bearer ${token.value}`) 

@@ -4,8 +4,9 @@ const key = '8j9QUGDEQ@U48BHsmhZAzvpcRa-rdW';
 const expiresIn = '24h'
 
 export class Token {
-    constructor(userId) {
-        this.value = this.createToken(userId);
+    constructor(value, isId = true) {
+        this.userId = isId ? value : jwt.verify(value, key);
+        this.value = isId ? this.createToken(value) : value;
     }
 
     // eslint-disable-next-line class-methods-use-this
@@ -22,6 +23,10 @@ export class Token {
             expiresIn,
         });
         return token;
+    }
+
+    getUserId() {
+        return this.userId;
     }
 
     getValue() {
