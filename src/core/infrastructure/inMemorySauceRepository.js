@@ -7,6 +7,11 @@ export class InMemorySauceRepository {
         return this.sauces;
     }
 
+    getSauce(id) {
+        const sauce = this.sauces.find((sauce) => sauce.getId() === id);
+        return sauce;
+    }
+
     addSauce(sauce) {
         this.sauces.push(sauce);
     }

@@ -33,10 +33,11 @@ describe('Sauce tests', () => {
             expect(response.status).toBe(401);
         });
     });
+    let userId = '';
+    let token = '';
+
     describe('GET /api/sauces', () => {
         it('responds with json', async () => {
-            const userId = 'USERID1';
-            const token = new Token(userId);
             // console.log('test valid token: ', token.value);
             const response = await request(app)
                 .get('/api/sauces')
@@ -49,9 +50,11 @@ describe('Sauce tests', () => {
         });
     });
     describe('POST /api/sauces', () => {
+        beforeEach(() => {
+            userId = 'USERID1';
+            token = new Token(userId);
+        });
         it('responds with an error when a sauce is sent without a file', async () => {
-            const userId = 'USERID1';
-            const token = new Token(userId);
             const response = await request(app)
                 .post('/api/sauces')
                 .set('Authorization', `Bearer ${token.value}`)
@@ -64,10 +67,12 @@ describe('Sauce tests', () => {
                 });
 
             expect(response.status).toBe(500);
+            expect(response.body.message).toBe(
+                "Cannot destructure property 'filename' of 'req.file' as it is undefined."
+            );
         });
+        // TODO: find a way to test file upload
         it('responds with json when a sauce is sent with a file', (done) => {
-            const userId = 'USERID1';
-            const token = new Token(userId);
             request(app)
                 .post('/api/sauces')
                 .set('Authorization', `Bearer ${token.value}`)
@@ -77,6 +82,35 @@ describe('Sauce tests', () => {
                     if (err) return done(err);
                     return done();
                 });
+        });
+    });
+
+    describe('GET /api/sauces/:id', () => {
+        beforeEach(() => {
+            userId = 'USERID1';
+            token = new Token(userId);
+        });
+        it('should respond with an error when the id is not valid', async () => {
+            const response = await request(app)
+                .get('/api/sauces/')
+                .query({ id: 'unvalidID' })
+                .set('Authorization', `Bearer ${token.value}`);
+
+            expect(response.status).toBe(500);
+            expect(response.body.message).toBe('error message to define');
+        });
+        it('should respond OK with json when the params contains a valid id', async () => {
+            // How to get a valid ID since it's generated ?
+
+            const response = await request(app)
+                .get('/api/sauces/')
+                .query({ id: 'validID' })
+                .set('Authorization', `Bearer ${token.value}`);
+
+            expect(response.status).toBe(200);
+            expect(response.headers['content-type']).toEqual(
+                expect.stringContaining('json')
+            );
         });
     });
 });
