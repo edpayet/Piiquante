@@ -1,11 +1,23 @@
 import { nanoid } from 'nanoid';
 
 export class Sauce {
-    constructor(id, userId, manufacturer, description, mainPepper, imageUrl, heat, likes, dislikes, usersLiked, usersDisliked) {
+    constructor({
+        id,
+        userId,
+        manufacturer = '',
+        description = '',
+        mainPepper = '',
+        imageUrl = '',
+        heat = 0,
+        likes = 0,
+        dislikes = 0,
+        usersLiked = [],
+        usersDisliked = [],
+    }) {
         if (userId == null) {
             throw Error('A userId is needed to create a sauce');
         }
-        
+
         this.id = id;
         this.userId = userId;
         this.manufacturer = manufacturer;
@@ -64,20 +76,8 @@ export class Sauce {
     }
 
     // To create a Sauce, it needs at least a userID, the rest is initialized
-    static create(userId, manufacturer = '', description = '', mainPepper = '', imageUrl = '', heat = 0, likes = 0, dislikes = 0, usersLiked = [], usersDisliked = []) {
+    static create(props) {
         const id = nanoid();
-        return new Sauce(
-            id,
-            userId,
-            manufacturer,
-            description,
-            mainPepper,
-            imageUrl,
-            heat,
-            likes,
-            dislikes,
-            usersLiked,
-            usersDisliked
-        );
+        return new Sauce({ id, ...props });
     }
 }

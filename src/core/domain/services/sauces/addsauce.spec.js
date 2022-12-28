@@ -13,7 +13,7 @@ describe('AddSauce', () => {
             const repository = new InMemorySauceRepository();
             const addSauce = new AddSauce(repository);
             const userId = 'USERID1';
-            const sauce = Sauce.create(userId);
+            const sauce = Sauce.create({ userId });
             addSauce.execute(sauce);
             expect(repository.getSauces().length).not.toBeNull();
             const repoSauce =
@@ -23,18 +23,9 @@ describe('AddSauce', () => {
         });
         it('the sauce should have all their fields initialized', () => {
             const userId = 'USERID2';
-            const sauce = Sauce.create(userId);
+            const sauce = Sauce.create({ userId });
             expect(sauce.getId()).toBeTruthy();
             expect(sauce.getUserId()).toEqual(userId);
-            expect(sauce.getManufacturer()).toEqual('');
-            expect(sauce.getDescription()).toEqual('');
-            expect(sauce.getMainPepper()).toEqual('');
-            expect(sauce.getImageUrl()).toEqual('');
-            expect(sauce.getHeat()).toEqual(0);
-            expect(sauce.getLikes()).toEqual(0);
-            expect(sauce.getDislikes()).toEqual(0);
-            expect(sauce.getUsersLiked()).toEqual([]);
-            expect(sauce.getUsersDisliked()).toEqual([]);
         });
         it('should create a sauce with all fields filled if all properties are filled', () => {
             const userId = 'USERID2';
@@ -45,10 +36,10 @@ describe('AddSauce', () => {
             const heat = 1;
             const likes = 3;
             const dislikes = 2;
-            const userLiked = ['user1', 'user2', 'user3'];
-            const userDisliked = ['user4', 'user5'];
+            const usersLiked = ['user1', 'user2', 'user3'];
+            const usersDisliked = ['user4', 'user5'];
 
-            const sauce = Sauce.create(
+            const sauce = Sauce.create({
                 userId,
                 manufacturer,
                 description,
@@ -57,10 +48,9 @@ describe('AddSauce', () => {
                 heat,
                 likes,
                 dislikes,
-                userLiked,
-                userDisliked
-            );
-
+                usersLiked,
+                usersDisliked,
+            });
             expect(sauce.getId()).toBeTruthy();
             expect(sauce.getUserId()).toEqual(userId);
             expect(sauce.getManufacturer()).toEqual(manufacturer);
@@ -70,8 +60,8 @@ describe('AddSauce', () => {
             expect(sauce.getHeat()).toEqual(heat);
             expect(sauce.getLikes()).toEqual(likes);
             expect(sauce.getDislikes()).toEqual(dislikes);
-            expect(sauce.getUsersLiked()).toEqual(userLiked);
-            expect(sauce.getUsersDisliked()).toEqual(userDisliked);
+            expect(sauce.getUsersLiked()).toEqual(usersLiked);
+            expect(sauce.getUsersDisliked()).toEqual(usersDisliked);
         });
     });
 
@@ -101,12 +91,11 @@ describe('AddSauce', () => {
         const repository = new InMemorySauceRepository();
         const addSauce = new AddSauce(repository);
 
+        const id = 'ID1';
         const userId = 'USERID1';
-        const manufacturer = 'Manufacturer1';
-        const imageUrl = '/path/image1.jpg';
-        const sauce = Sauce.create(userId, manufacturer, imageUrl);
+        const sauce = new Sauce({ id, userId });
 
         addSauce.execute(sauce);
-        expect(repository.getSauces()[0]).toEqual(sauce);
+        expect(repository.getSauces()[0].getId()).toEqual(id);
     });
 });

@@ -15,4 +15,11 @@ export class InMemorySauceRepository {
     addSauce(sauce) {
         this.sauces.push(sauce);
     }
+
+    updateSauce(newSauce) {
+        const oldSauce = this.sauces.find(
+            (sauce) => sauce.getId() === newSauce.getId()
+        );
+        this.sauces[this.sauces.indexOf(oldSauce)] = newSauce;
+    }
 }

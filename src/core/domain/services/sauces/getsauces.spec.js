@@ -21,7 +21,7 @@ describe('GetSauces', () => {
     it('Should return an array of sauces when execute', () => {
         const sauceRepository = new InMemorySauceRepository();
         const userId = 'USERID1';
-        sauceRepository.addSauce(Sauce.create(userId));
+        sauceRepository.addSauce(Sauce.create({ userId }));
         const getSauces = new GetSauces(sauceRepository);
         const sauces = getSauces.execute();
         expect(sauces[0]).toBeInstanceOf(Sauce);
@@ -29,7 +29,7 @@ describe('GetSauces', () => {
     it('the array should not be empty if repository contains a sauce with USERID1', () => {
         const sauceRepository = new InMemorySauceRepository();
         const userId = 'USERID1';
-        sauceRepository.addSauce(Sauce.create(userId));
+        sauceRepository.addSauce(Sauce.create({ userId }));
         const getSauces = new GetSauces(sauceRepository);
         const sauces = getSauces.execute();
         expect(sauces.length).toEqual(1);
@@ -38,7 +38,7 @@ describe('GetSauces', () => {
     it('the array should not be empty if repository contains a sauce with USERID2', () => {
         const sauceRepository = new InMemorySauceRepository();
         const userId = 'USERID2';
-        sauceRepository.addSauce(Sauce.create(userId));
+        sauceRepository.addSauce(Sauce.create({ userId }));
         const getSauces = new GetSauces(sauceRepository);
         const sauces = getSauces.execute();
         expect(sauces.length).toEqual(1);

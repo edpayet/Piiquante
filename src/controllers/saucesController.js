@@ -1,6 +1,6 @@
 import status from 'http-status';
 
-import { getSauces, getSauce, addSauce } from '../core/api';
+import { getSauces, getSauce, addSauce, updateSauce } from '../core/api';
 
 export const getAll = async (req, res) => {
     try {
@@ -30,6 +30,26 @@ export const addOne = async (req, res) => {
         const { filename } = req.file;
 
         await addSauce.execute({
+            ...sauceObject,
+            userId,
+            imageUrl: `${req.protocol}://${req.get('host')}/images/${filename}`,
+        });
+        res.status(status.CREATED).json({
+            message: 'Sauce added',
+        });
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ message: error.message });
+    }
+};
+
+export const updateOne = async (req, res) => {
+    try {
+        const { _userId, ...sauceObject } = req.body.sauce;
+        const { userId } = req.auth;
+        const { filename } = req.file;
+
+        await updateSauce.execute({
             ...sauceObject,
             userId,
             imageUrl: `${req.protocol}://${req.get('host')}/images/${filename}`,

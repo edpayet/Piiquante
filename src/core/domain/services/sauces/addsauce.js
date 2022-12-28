@@ -1,5 +1,3 @@
-import { Sauce } from '../../entities/Sauce';
-
 export class AddSauce {
     constructor(sauceRepository) {
         if (!sauceRepository) {

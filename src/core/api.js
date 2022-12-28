@@ -4,6 +4,7 @@ import { InMemoryUserRepository } from './infrastructure/inMemoryUserRepository'
 import { GetSauces } from './domain/services/sauces/getsauces';
 import { GetSauce } from './domain/services/sauces/getsauce';
 import { AddSauce } from './domain/services/sauces/addsauce';
+import { UpdateSauce } from './domain/services/sauces/updatesauce';
 import { InMemorySauceRepository } from './infrastructure/inMemorySauceRepository';
 
 const userRepository = new InMemoryUserRepository();
@@ -14,3 +15,4 @@ const sauceRepository = new InMemorySauceRepository();
 export const getSauces = new GetSauces(sauceRepository);
 export const getSauce = new GetSauce(sauceRepository);
 export const addSauce = new AddSauce(sauceRepository);
+export const updateSauce = new UpdateSauce(sauceRepository);

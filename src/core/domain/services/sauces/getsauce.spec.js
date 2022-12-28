@@ -32,7 +32,7 @@ describe('GetSauce', () => {
     it('should return a sauce when a valid id is given', () => {
         const sauceRepository = new InMemorySauceRepository();
         const getSauce = new GetSauce(sauceRepository);
-        sauceRepository.addSauce(Sauce.create('USERID1'));
+        sauceRepository.addSauce(Sauce.create({ userId: 'USERID1' }));
         const id = sauceRepository.getSauces()[0].getId();
 
         const sauce = getSauce.execute(id);
