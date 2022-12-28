@@ -53,6 +53,7 @@ describe('Sauce tests', () => {
             );
         });
     });
+
     describe('POST /api/sauces', () => {
         beforeEach(() => {
             userId = 'USERID1';
@@ -89,19 +90,6 @@ describe('Sauce tests', () => {
 
             expect(response.status).toBe(500);
             expect(response.body.message).toBe('No sauce found with this id');
-        });
-        it('should respond OK with json when the params contains a valid id', async () => {
-            // How to get a valid ID since it's generated ?
-
-            const response = await request(app)
-                .get('/api/sauces/')
-                .query({ id: 'validID' })
-                .set('Authorization', `Bearer ${token.value}`);
-
-            expect(response.status).toBe(200);
-            expect(response.headers['content-type']).toEqual(
-                expect.stringContaining('json')
-            );
         });
     });
 });

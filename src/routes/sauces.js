@@ -7,6 +7,7 @@ import {
     getOne,
     addOne,
     updateOne,
+    removeOne,
 } from '../controllers/saucesController';
 
 const router = express.Router();
@@ -15,4 +16,5 @@ router.get('/', auth, getAll);
 router.post('/', auth, multerUpload, addOne);
 router.get('/:id', auth, getOne);
 router.put('/:id', auth, multerUpload, updateOne);
+router.delete('/:id', auth, removeOne);
 export default router;

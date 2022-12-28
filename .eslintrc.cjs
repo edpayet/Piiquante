@@ -5,7 +5,7 @@ module.exports = {
         'jest/globals': true,
     },
     extends: ['airbnb-base', 'prettier'],
-    plugins: ['jest', 'prettier'],
+    plugins: ['jest'],
     overrides: [],
     parserOptions: {
         ecmaVersion: 'latest',
@@ -14,6 +14,5 @@ module.exports = {
     rules: {
         'max-classes-per-file': ['error', 7],
         'import/prefer-default-export': 'off',
-        'prettier/prettier': ['error'],
     },
 };

@@ -22,4 +22,9 @@ export class InMemorySauceRepository {
         );
         this.sauces[this.sauces.indexOf(oldSauce)] = newSauce;
     }
+
+    removeSauce(id) {
+        const sauceToRemove = this.sauces.find((sauce) => sauce.getId() === id);
+        this.sauces.splice(this.sauces.indexOf(sauceToRemove), 1);
+    }
 }
