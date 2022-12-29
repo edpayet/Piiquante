@@ -6,6 +6,7 @@ import { GetSauce } from './domain/services/sauces/getsauce';
 import { AddSauce } from './domain/services/sauces/addsauce';
 import { UpdateSauce } from './domain/services/sauces/updatesauce';
 import { RemoveSauce } from './domain/services/sauces/removesauce';
+import { VoteSauce } from './domain/services/sauces/votesauce';
 import { InMemorySauceRepository } from './infrastructure/inMemorySauceRepository';
 
 const userRepository = new InMemoryUserRepository();
@@ -18,3 +19,4 @@ export const getSauce = new GetSauce(sauceRepository);
 export const addSauce = new AddSauce(sauceRepository);
 export const updateSauce = new UpdateSauce(sauceRepository);
 export const removeSauce = new RemoveSauce(sauceRepository);
+export const voteSauce = new VoteSauce(sauceRepository);

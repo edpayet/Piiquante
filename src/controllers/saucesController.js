@@ -6,6 +6,7 @@ import {
     addSauce,
     updateSauce,
     removeSauce,
+    voteSauce,
 } from '../core/api';
 
 export const getAll = async (req, res) => {
@@ -35,7 +36,7 @@ export const getOne = async (req, res) => {
 
 export const addOne = async (req, res) => {
     try {
-        const { _userId, ...sauceObject } = req.body.sauce;
+        const { ...sauceObject } = JSON.parse(req.body.sauce);
         const { userId } = req.auth;
         const { filename } = req.file;
 
@@ -85,6 +86,24 @@ export const removeOne = async (req, res) => {
         await removeSauce.execute(id, userId);
         res.status(status.OK).json({
             message: 'Sauce removed',
+        });
+    } catch (error) {
+        console.log(error);
+        res.status(status.INTERNAL_SERVER_ERROR).json({
+            message: error.message,
+        });
+    }
+};
+
+export const voteOne = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const { userId } = req.auth;
+        const { like } = req.body;
+
+        const vote = await voteSauce.execute(userId, id, like);
+        res.status(status.OK).json({
+            message: `Sauce ${vote}`,
         });
     } catch (error) {
         console.log(error);

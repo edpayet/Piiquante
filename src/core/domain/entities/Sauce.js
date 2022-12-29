@@ -63,8 +63,30 @@ export class Sauce {
         return this.likes;
     }
 
+    like(userId) {
+        if (this.usersLiked.includes(userId)) return;
+
+        if (this.usersDisliked.includes(userId)) {
+            this.usersDisliked.splice(this.usersDisliked.indexOf(userId), 1);
+            this.dislikes -= 1;
+        }
+        this.usersLiked.push(userId);
+        this.likes += 1;
+    }
+
     getDislikes() {
         return this.dislikes;
+    }
+
+    dislike(userId) {
+        if (this.usersDisliked.includes(userId)) return;
+
+        if (this.usersLiked.includes(userId)) {
+            this.usersLiked.splice(this.usersLiked.indexOf(userId), 1);
+            this.likes -= 1;
+        }
+        this.usersDisliked.push(userId);
+        this.dislikes += 1;
     }
 
     getUsersLiked() {

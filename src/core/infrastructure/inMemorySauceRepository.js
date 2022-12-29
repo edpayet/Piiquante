@@ -8,8 +8,8 @@ export class InMemorySauceRepository {
     }
 
     getSauce(id) {
-        const sauce = this.sauces.find((sauce) => sauce.getId() === id);
-        return sauce;
+        const sauceToGet = this.sauces.find((sauce) => sauce.getId() === id);
+        return sauceToGet;
     }
 
     addSauce(sauce) {
@@ -26,5 +26,17 @@ export class InMemorySauceRepository {
     removeSauce(id) {
         const sauceToRemove = this.sauces.find((sauce) => sauce.getId() === id);
         this.sauces.splice(this.sauces.indexOf(sauceToRemove), 1);
+    }
+
+    likeSauce(userId, id) {
+        const sauceToLike = this.sauces.find((sauce) => sauce.getId() === id);
+        sauceToLike.like(userId);
+    }
+
+    dislikeSauce(userId, id) {
+        const sauceToDislike = this.sauces.find(
+            (sauce) => sauce.getId() === id
+        );
+        sauceToDislike.dislike(userId);
     }
 }

@@ -84,7 +84,7 @@ describe('AddSauce', () => {
         const repository = new InMemorySauceRepository();
         const addSauce = new AddSauce(repository);
         expect(() => addSauce.execute()).toThrowError(
-            'AddSauce requires a sauce'
+            'AddSauce requires sauce data'
         );
     });
     it('should add the sauce to the repository', () => {

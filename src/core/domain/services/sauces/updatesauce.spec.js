@@ -62,4 +62,38 @@ describe('UpdateSauce', () => {
             newImageUrl
         );
     });
+
+    it('should not reset the likes/dislikes values and arrays when updated', () => {
+        const sauceRepository = new InMemorySauceRepository();
+        const updateSauce = new UpdateSauce(sauceRepository);
+
+        const id = 'ID1';
+        const userId = 'USERID1';
+        const oldImageUrl = '/path/image1.jpg';
+        const likes = 1;
+        const dislikes = 1;
+        const usersLiked = ['USERID2'];
+        const usersDisliked = ['USERID3'];
+        const repoSauce = new Sauce({
+            id,
+            userId,
+            imageUrl: oldImageUrl,
+            likes,
+            dislikes,
+            usersLiked,
+            usersDisliked,
+        });
+        sauceRepository.addSauce(repoSauce);
+        const newImageUrl = '/path/NewImage.jpg';
+
+        updateSauce.execute({ id, userId, imageUrl: newImageUrl });
+        expect(sauceRepository.getSauces()[0].getLikes()).toEqual(likes);
+        expect(sauceRepository.getSauces()[0].getDislikes()).toEqual(dislikes);
+        expect(sauceRepository.getSauces()[0].getUsersLiked()).toEqual(
+            usersLiked
+        );
+        expect(sauceRepository.getSauces()[0].getUsersDisliked()).toEqual(
+            usersDisliked
+        );
+    });
 });

@@ -1,3 +1,5 @@
+import { Sauce } from '../../entities/Sauce';
+
 export class AddSauce {
     constructor(sauceRepository) {
         if (!sauceRepository) {
@@ -6,10 +8,11 @@ export class AddSauce {
         this.sauceRepository = sauceRepository;
     }
 
-    execute(sauce) {
-        if (!sauce) {
-            throw new Error('AddSauce requires a sauce');
+    execute(props) {
+        if (!props) {
+            throw new Error('AddSauce requires sauce data');
         }
+        const sauce = Sauce.create({ ...props });
         this.sauceRepository.addSauce(sauce);
     }
 }

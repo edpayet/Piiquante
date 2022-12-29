@@ -8,6 +8,7 @@ import {
     addOne,
     updateOne,
     removeOne,
+    voteOne,
 } from '../controllers/saucesController';
 
 const router = express.Router();
@@ -17,4 +18,5 @@ router.post('/', auth, multerUpload, addOne);
 router.get('/:id', auth, getOne);
 router.put('/:id', auth, multerUpload, updateOne);
 router.delete('/:id', auth, removeOne);
+router.post('/:id/like', auth, voteOne);
 export default router;
