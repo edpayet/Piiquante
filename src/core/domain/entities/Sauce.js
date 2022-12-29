@@ -4,6 +4,7 @@ export class Sauce {
     constructor({
         id,
         userId,
+        name = '',
         manufacturer = '',
         description = '',
         mainPepper = '',
@@ -20,6 +21,7 @@ export class Sauce {
 
         this.id = id;
         this.userId = userId;
+        this.name = name;
         this.manufacturer = manufacturer;
         this.description = description;
         this.mainPepper = mainPepper;
@@ -37,6 +39,10 @@ export class Sauce {
 
     getUserId() {
         return this.userId;
+    }
+
+    getName() {
+        return this.name;
     }
 
     getManufacturer() {

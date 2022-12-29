@@ -29,6 +29,7 @@ describe('AddSauce', () => {
         });
         it('should create a sauce with all fields filled if all properties are filled', () => {
             const userId = 'USERID2';
+            const name = 'Name1';
             const manufacturer = 'Manufacturer1';
             const description = 'This is a description.';
             const mainPepper = 'Spicy Pepper';
@@ -41,6 +42,7 @@ describe('AddSauce', () => {
 
             const sauce = Sauce.create({
                 userId,
+                name,
                 manufacturer,
                 description,
                 mainPepper,
@@ -53,6 +55,7 @@ describe('AddSauce', () => {
             });
             expect(sauce.getId()).toBeTruthy();
             expect(sauce.getUserId()).toEqual(userId);
+            expect(sauce.getName()).toEqual(name);
             expect(sauce.getManufacturer()).toEqual(manufacturer);
             expect(sauce.getDescription()).toEqual(description);
             expect(sauce.getMainPepper()).toEqual(mainPepper);

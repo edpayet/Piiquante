@@ -80,6 +80,7 @@ export const updateOne = async (req, res) => {
             message: 'Sauce updated',
         });
     } catch (error) {
+        // TODO send a 403 when the user is not authorised to update this sauce
         console.log(error);
         res.status(status.INTERNAL_SERVER_ERROR).json({
             message: error.message,
