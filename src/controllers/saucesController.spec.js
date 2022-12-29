@@ -64,16 +64,16 @@ describe('Sauce tests', () => {
                 .post('/api/sauces')
                 .set('Authorization', `Bearer ${token.value}`)
                 .send({
-                    sauce: {
+                    sauce: JSON.stringify({
                         manufacturer: 'MANUFACTURER',
                         description: 'This is a description',
                         heat: 1,
-                    },
+                    }),
                 });
 
             expect(response.status).toBe(500);
             expect(response.body.message).toBe(
-                "Cannot destructure property 'filename' of 'req.file' as it is undefined."
+                'Adding a sauce needs an image file'
             );
         });
     });

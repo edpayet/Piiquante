@@ -38,6 +38,7 @@ export const addOne = async (req, res) => {
     try {
         const { ...sauceObject } = JSON.parse(req.body.sauce);
         const { userId } = req.auth;
+        if (!req.file) throw new Error('Adding a sauce needs an image file');
         const { filename } = req.file;
 
         await addSauce.execute({
@@ -58,14 +59,22 @@ export const addOne = async (req, res) => {
 
 export const updateOne = async (req, res) => {
     try {
-        const { _userId, ...sauceObject } = req.body.sauce;
+        const { _userId, ...sauceObject } = req.file
+            ? {
+                  ...JSON.parse(req.body.sauce),
+                  imageUrl: `${req.protocol}://${req.get('host')}/images/${
+                      req.file.filename
+                  }`,
+              }
+            : { ...req.body };
+
         const { userId } = req.auth;
-        const { filename } = req.file;
+        const { id } = req.params;
 
         await updateSauce.execute({
             ...sauceObject,
             userId,
-            imageUrl: `${req.protocol}://${req.get('host')}/images/${filename}`,
+            id,
         });
         res.status(status.CREATED).json({
             message: 'Sauce updated',
