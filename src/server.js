@@ -31,7 +31,6 @@ const errorHandler = (error) => {
 
 server.on('error', errorHandler);
 
-
 mongoose.set('strictQuery', false);
 
 mongoose

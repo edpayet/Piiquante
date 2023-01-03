@@ -11,6 +11,8 @@ export class VoteSauce {
         if (!id) throw new Error('VoteSauce needs an id');
         if (vote === null || vote === undefined)
             throw new Error('A vote value is needed to vote');
+
+        // TODO: a user can vote 0, it will cancel any like or dislike already present
         if (!Number.isInteger(vote) || vote === 0)
             throw new Error(
                 'The vote value needs to be an integer not equal to 0'

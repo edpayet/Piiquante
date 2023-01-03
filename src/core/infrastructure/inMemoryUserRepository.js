@@ -4,11 +4,11 @@ export class InMemoryUserRepository {
         this.users = [];
     }
 
-    addUser(user) {
+    async addUser(user) {
         this.users.push(user);
     }
 
-    findUserByEmail(email) {
+    async findUserByEmail(email) {
         return this.users.find((user) => user.hasEmail(email));
     }
 }
