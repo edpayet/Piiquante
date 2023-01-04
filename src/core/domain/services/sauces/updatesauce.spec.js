@@ -18,21 +18,23 @@ describe('UpdateSauce', () => {
         const updateSauce = new UpdateSauce(sauceRepository);
         expect(updateSauce.execute).toBeDefined();
     });
-    it('should return an error if no object is given', () => {
+    it('should return an error if no object is given', async () => {
         const sauceRepository = new InMemorySauceRepository();
         const updateSauce = new UpdateSauce(sauceRepository);
-        expect(() => updateSauce.execute()).toThrowError(
+        expect((await updateSauce.execute()).error.message).toEqual(
             'UpdateSauce requires a sauce id'
         );
     });
-    it('should return an error if no sauce with this ID is found in the repository', () => {
+    it('should return an error if no sauce with this ID is found in the repository', async () => {
         const sauceRepository = new InMemorySauceRepository();
         const updateSauce = new UpdateSauce(sauceRepository);
 
         const sauce = { id: 'ID1', userId: 'USERID1' };
-        expect(() => updateSauce.execute(sauce)).toThrowError();
+        expect((await updateSauce.execute(sauce)).error.message).toEqual(
+            'No sauce is found with this id'
+        );
     });
-    it('should return an error if the userId is not valid', () => {
+    it('should return an error if the userId is not valid', async () => {
         const sauceRepository = new InMemorySauceRepository();
         const updateSauce = new UpdateSauce(sauceRepository);
 
@@ -41,11 +43,12 @@ describe('UpdateSauce', () => {
         const repoSauce = new Sauce({ id, userId });
         sauceRepository.addSauce(repoSauce);
 
-        expect(() =>
-            updateSauce.execute({ id, userId: 'UnvalidUserID' })
-        ).toThrowError('The user is not authorised to update this sauce');
+        expect(
+            (await updateSauce.execute({ id, userId: 'UnvalidUserID' })).error
+                .message
+        ).toEqual('The user is not authorised to update this sauce');
     });
-    it('should update the sauce with new properties if found in the repository', () => {
+    it('should update the sauce with new properties if found in the repository', async () => {
         const sauceRepository = new InMemorySauceRepository();
         const updateSauce = new UpdateSauce(sauceRepository);
 
@@ -57,7 +60,7 @@ describe('UpdateSauce', () => {
 
         const newImageUrl = '/path/NewImage.jpg';
 
-        updateSauce.execute({ id, userId, imageUrl: newImageUrl });
+        await updateSauce.execute({ id, userId, imageUrl: newImageUrl });
         expect(sauceRepository.getSauces()[0].getImageUrl()).toEqual(
             newImageUrl
         );

@@ -83,14 +83,14 @@ describe('AddSauce', () => {
         const addSauce = new AddSauce(repository);
         expect(addSauce.execute).toBeDefined();
     });
-    it('should return an error if no sauce is given', () => {
+    it('should return an error if no sauce is given', async () => {
         const repository = new InMemorySauceRepository();
         const addSauce = new AddSauce(repository);
-        expect(() => addSauce.execute()).toThrowError(
+        expect((await addSauce.execute()).error.message).toEqual(
             'AddSauce requires sauce data'
         );
     });
-    it('should add the sauce to the repository', () => {
+    it('should add the sauce to the repository', async () => {
         const repository = new InMemorySauceRepository();
         const addSauce = new AddSauce(repository);
 
@@ -98,7 +98,8 @@ describe('AddSauce', () => {
         const userId = 'USERID1';
         const sauce = new Sauce({ id, userId });
 
-        addSauce.execute(sauce);
+        const result = await addSauce.execute(sauce);
+        expect(result.isError()).toBeFalsy();
         expect(repository.getSauces()[0].getId()).toEqual(id);
     });
 });

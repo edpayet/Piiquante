@@ -1,3 +1,5 @@
+import { Result } from '../../../../util/result';
+
 export class VoteSauce {
     constructor(sauceRepository) {
         if (!sauceRepository) {
@@ -6,27 +8,42 @@ export class VoteSauce {
         this.sauceRepository = sauceRepository;
     }
 
-    execute(userId, id, vote) {
-        if (!userId) throw new Error('VoteSauce needs a userId');
-        if (!id) throw new Error('VoteSauce needs an id');
-        if (vote === null || vote === undefined)
-            throw new Error('A vote value is needed to vote');
+    async execute(userId, id, vote) {
+        try {
+            if (!userId)
+                return Result.failure(new Error('VoteSauce needs a userId'));
+            if (!id) return Result.failure(new Error('VoteSauce needs an id'));
+            if (vote === null || vote === undefined)
+                return Result.failure(
+                    new Error('A vote value is needed to vote')
+                );
 
-        // TODO: a user can vote 0, it will cancel any like or dislike already present
-        if (!Number.isInteger(vote) || vote === 0)
-            throw new Error(
-                'The vote value needs to be an integer not equal to 0'
-            );
+            if (!Number.isInteger(vote))
+                return Result.failure(
+                    new Error('The vote value needs to be an integer')
+                );
 
-        const sauce = this.sauceRepository.getSauce(id);
-        if (!sauce) throw new Error('No sauce is found with this id');
+            const sauce = this.sauceRepository.getSauce(id);
+            if (!sauce)
+                return Result.failure(
+                    new Error('No sauce is found with this id')
+                );
 
-        if (vote > 0) {
-            this.sauceRepository.likeSauce(userId, id);
-            return 'liked';
+            if (vote === 0) {
+                await this.sauceRepository.unlikeSauce(userId, id);
+                return Result.success('like/dislike removed');
+            }
+
+            if (vote > 0) {
+                await this.sauceRepository.likeSauce(userId, id);
+                return Result.success('liked');
+            }
+
+            await this.sauceRepository.dislikeSauce(userId, id);
+            return Result.success('disliked');
+        } catch (error) {
+            console.log(error);
+            return Result.failure(error);
         }
-
-        this.sauceRepository.dislikeSauce(userId, id);
-        return 'disliked';
     }
 }

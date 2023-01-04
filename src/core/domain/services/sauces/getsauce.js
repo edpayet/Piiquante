@@ -1,4 +1,5 @@
 import { Sauce } from '../../entities/Sauce';
+import { Result } from '../../../../util/result';
 
 export class GetSauce {
     constructor(sauceRepository) {
@@ -8,11 +9,17 @@ export class GetSauce {
         this.sauceRepository = sauceRepository;
     }
 
-    execute(id) {
-        if (!id) throw new Error('GetSauce needs an id');
-        const sauce = this.sauceRepository.getSauce(id);
-        if (!sauce) throw new Error('No sauce found with this id');
-        console.log('sauce: ', sauce);
-        return sauce;
+    async execute(id) {
+        try {
+            if (!id) return Result.failure(new Error('GetSauce needs an id'));
+            const sauce = await this.sauceRepository.getSauce(id);
+            if (!sauce)
+                return Result.failure(new Error('No sauce found with this id'));
+            //console.log('sauce: ', sauce);
+            return Result.success(sauce);
+        } catch (error) {
+            console.log(error);
+            return Result.failure(error);
+        }
     }
 }

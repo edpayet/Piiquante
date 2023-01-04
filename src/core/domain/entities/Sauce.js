@@ -69,6 +69,18 @@ export class Sauce {
         return this.likes;
     }
 
+    unlike(userId) {
+        if (this.usersDisliked.includes(userId)) {
+            this.usersDisliked.splice(this.usersDisliked.indexOf(userId), 1);
+            this.dislikes -= 1;
+        }
+
+        if (this.usersLiked.includes(userId)) {
+            this.usersLiked.splice(this.usersLiked.indexOf(userId), 1);
+            this.likes -= 1;
+        }
+    }
+
     like(userId) {
         if (this.usersLiked.includes(userId)) return;
 

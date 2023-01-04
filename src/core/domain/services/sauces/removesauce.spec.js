@@ -18,38 +18,38 @@ describe('RemoveSauce', () => {
         const removeSauce = new RemoveSauce(sauceRepository);
         expect(removeSauce.execute).toBeDefined();
     });
-    it('should return an error when no id is given', () => {
+    it('should return an error when no id is given', async () => {
         const sauceRepository = new InMemorySauceRepository();
         const removeSauce = new RemoveSauce(sauceRepository);
-        expect(() => removeSauce.execute()).toThrowError(
+        expect((await removeSauce.execute()).error.message).toEqual(
             'RemoveSauce needs an id'
         );
     });
-    it('should return an error when an invalid id is given', () => {
+    it('should return an error when an invalid id is given', async () => {
         const sauceRepository = new InMemorySauceRepository();
         const removeSauce = new RemoveSauce(sauceRepository);
         const id = 'invalidID';
-        expect(() => removeSauce.execute(id, 'USERID1')).toThrowError(
-            'No sauce is found with this id'
-        );
+        expect(
+            (await removeSauce.execute(id, 'USERID1')).error.message
+        ).toEqual('No sauce is found with this id');
     });
-    it('should return an error when an invalid userId is given', () => {
+    it('should return an error when an invalid userId is given', async () => {
         const sauceRepository = new InMemorySauceRepository();
         const removeSauce = new RemoveSauce(sauceRepository);
         sauceRepository.addSauce(Sauce.create({ userId: 'USERID1' }));
         const id = sauceRepository.getSauces()[0].getId();
-        expect(() => removeSauce.execute(id, 'unvalidUserId')).toThrowError(
-            'This user is not authorized to remove this sauce'
-        );
+        expect(
+            (await removeSauce.execute(id, 'unvalidUserId')).error.message
+        ).toEqual('This user is not authorized to remove this sauce');
     });
-    it('should remove a sauce when a valid id is given', () => {
+    it('should remove a sauce when a valid id is given', async () => {
         const sauceRepository = new InMemorySauceRepository();
         const removeSauce = new RemoveSauce(sauceRepository);
         const userId = 'USERID1';
         sauceRepository.addSauce(Sauce.create({ userId }));
         const id = sauceRepository.getSauces()[0].getId();
 
-        removeSauce.execute(id, userId);
+        await removeSauce.execute(id, userId);
         expect(sauceRepository.getSauces()[0]).not.toBeTruthy();
     });
 });

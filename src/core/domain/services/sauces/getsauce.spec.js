@@ -18,24 +18,29 @@ describe('GetSauce', () => {
         const getSauce = new GetSauce(sauceRepository);
         expect(getSauce.execute).toBeDefined();
     });
-    it('should return an error when no id is given', () => {
+    it('should return an error when no id is given', async () => {
         const sauceRepository = new InMemorySauceRepository();
         const getSauce = new GetSauce(sauceRepository);
-        expect(() => getSauce.execute()).toThrowError();
+        expect((await getSauce.execute()).error.message).toEqual(
+            'GetSauce needs an id'
+        );
     });
-    it('should return an error when an invalid id is given', () => {
+    it('should return an error when an invalid id is given', async () => {
         const sauceRepository = new InMemorySauceRepository();
         const getSauce = new GetSauce(sauceRepository);
         const id = 'invalidID';
-        expect(() => getSauce.execute(id)).toThrowError();
+        expect((await getSauce.execute(id)).error.message).toEqual(
+            'No sauce found with this id'
+        );
     });
-    it('should return a sauce when a valid id is given', () => {
+    it('should return a sauce when a valid id is given', async () => {
         const sauceRepository = new InMemorySauceRepository();
         const getSauce = new GetSauce(sauceRepository);
         sauceRepository.addSauce(Sauce.create({ userId: 'USERID1' }));
         const id = sauceRepository.getSauces()[0].getId();
-
-        const sauce = getSauce.execute(id);
+        const result = await getSauce.execute(id);
+        expect(result.isError()).toBeFalsy();
+        const sauce = result.content;
         expect(sauce.getId()).toEqual(id);
     });
 });

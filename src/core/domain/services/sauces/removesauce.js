@@ -1,3 +1,5 @@
+import { Result } from '../../../../util/result';
+
 export class RemoveSauce {
     constructor(sauceRepository) {
         if (!sauceRepository) {
@@ -6,13 +8,27 @@ export class RemoveSauce {
         this.sauceRepository = sauceRepository;
     }
 
-    execute(id, userId) {
-        if (!id) throw new Error('RemoveSauce needs an id');
-        if (!userId) throw new Error('RemoveSauce needs an userId');
-        const sauceToRemove = this.sauceRepository.getSauce(id);
-        if (!sauceToRemove) throw new Error('No sauce is found with this id');
-        if (sauceToRemove.getUserId() !== userId)
-            throw new Error('This user is not authorized to remove this sauce');
-        this.sauceRepository.removeSauce(id);
+    async execute(id, userId) {
+        try {
+            if (!id)
+                return Result.failure(new Error('RemoveSauce needs an id'));
+            if (!userId)
+                return Result.failure(new Error('RemoveSauce needs an userId'));
+            const sauceToRemove = await this.sauceRepository.getSauce(id);
+            if (!sauceToRemove)
+                return Result.failure(
+                    new Error('No sauce is found with this id')
+                );
+            if (sauceToRemove.getUserId() !== userId)
+                return Result.failure(
+                    new Error(
+                        'This user is not authorized to remove this sauce'
+                    )
+                );
+            await this.sauceRepository.removeSauce(id);
+        } catch (error) {
+            console.log(error);
+            return Result.failure(error);
+        }
     }
 }

@@ -1,4 +1,5 @@
 import { Sauce } from '../../entities/Sauce';
+import { Result } from '../../../../util/result';
 
 export class AddSauce {
     constructor(sauceRepository) {
@@ -8,11 +9,19 @@ export class AddSauce {
         this.sauceRepository = sauceRepository;
     }
 
-    execute(props) {
-        if (!props) {
-            throw new Error('AddSauce requires sauce data');
+    async execute(props) {
+        try {
+            if (!props) {
+                return Result.failure(
+                    new Error('AddSauce requires sauce data')
+                );
+            }
+            const sauce = Sauce.create({ ...props });
+            await this.sauceRepository.addSauce(sauce);
+            return Result.success('Sauce added');
+        } catch (error) {
+            console.log(error);
+            return Result.failure(error);
         }
-        const sauce = Sauce.create({ ...props });
-        this.sauceRepository.addSauce(sauce);
     }
 }

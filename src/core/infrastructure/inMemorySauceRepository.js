@@ -28,6 +28,11 @@ export class InMemorySauceRepository {
         this.sauces.splice(this.sauces.indexOf(sauceToRemove), 1);
     }
 
+    unlikeSauce(userId, id) {
+        const sauceToLike = this.sauces.find((sauce) => sauce.getId() === id);
+        sauceToLike.unlike(userId);
+    }
+
     likeSauce(userId, id) {
         const sauceToLike = this.sauces.find((sauce) => sauce.getId() === id);
         sauceToLike.like(userId);
