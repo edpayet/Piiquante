@@ -1,7 +1,10 @@
+/* eslint-disable no-underscore-dangle */
 /* eslint-disable class-methods-use-this */
 import { User } from '../domain/entities/User';
+import { Email } from '../domain/valueObjects/Email';
+import { Password } from '../domain/valueObjects/Password';
 
-import { UserModel } from './models/user';
+const UserModel = require('./models/user');
 
 export class MongoDbUserRepository {
     async addUser(user) {
@@ -16,7 +19,11 @@ export class MongoDbUserRepository {
         const mongoDbUser = await UserModel.findOne({ email: email.value });
         console.log('mongoDb user: ', mongoDbUser);
         if (!mongoDbUser) return false;
-        const user = User.create(mongoDbUser.email, mongoDbUser.password);
+        const user = new User(
+            mongoDbUser._id,
+            new Email(mongoDbUser.email),
+            new Password(mongoDbUser.password, false, true)
+        );
         console.log('user: ', user);
         return user;
     }

@@ -1,35 +1,73 @@
+/* eslint-disable no-underscore-dangle */
 /* eslint-disable class-methods-use-this */
-import Sauce from '../domain/entities/Sauce';
+import { Sauce } from '../domain/entities/Sauce';
 
+const mongoose = require('mongoose');
 const fs = require('fs');
 const SauceModel = require('./models/sauce');
 
 export class MongoDbSauceRepository {
+    convertSauceModelToDomain(sauceModel) {
+        return new Sauce({
+            id: sauceModel._id,
+            userId: sauceModel.userId,
+            name: sauceModel.name,
+            manufacturer: sauceModel.manufacturer,
+            description: sauceModel.description,
+            mainPepper: sauceModel.mainPepper,
+            imageUrl: sauceModel.imageUrl,
+            heat: sauceModel.heat,
+            likes: sauceModel.likes,
+            dislikes: sauceModel.disLikes,
+            usersLiked: sauceModel.usersLiked,
+            usersDisliked: sauceModel.usersDisliked,
+        });
+    }
+
+    convertSauceDomainToModel(sauce) {
+        return {
+            userId: sauce.getUserId(),
+            name: sauce.getName(),
+            manufacturer: sauce.getManufacturer(),
+            description: sauce.getDescription(),
+            mainPepper: sauce.getMainPepper(),
+            imageUrl: sauce.getImageUrl(),
+            heat: sauce.getHeat(),
+            likes: sauce.getLikes(),
+            disLikes: sauce.getDislikes(),
+            usersLiked: sauce.getUsersLiked(),
+            usersDisliked: sauce.getUsersDisliked(),
+        };
+    }
+
     async getSauces() {
-        const sauces = await SauceModel.find();
-        console.log('mongoDb getSauces: ', sauces);
-        return sauces;
+        const saucesModels = await SauceModel.find();
+        console.log('mongoDb getSauces: ', saucesModels);
+        return saucesModels.map((sauceModel) =>
+            this.convertSauceModelToDomain(sauceModel)
+        );
     }
 
     async getSauce(id) {
-        const sauce = await SauceModel.findOne({ _id: id });
+        if (!mongoose.Types.ObjectId.isValid(id)) return null;
+        const sauceModel = await SauceModel.findOne({ _id: id });
+        const sauce = this.convertSauceModelToDomain(sauceModel);
         console.log('mongoDb getSauce: ', sauce);
         return sauce;
     }
 
-    async addSauce(object) {
-        const sauce = new SauceModel({
-            ...object,
-        });
-        await sauce.save();
+    async addSauce(sauce) {
+        const sauceModel = new SauceModel(
+            this.convertSauceDomainToModel(sauce)
+        );
+        await sauceModel.save();
     }
 
-    async updateSauce(id, body) {
-        const sauce = await SauceModel.updateOne(
-            { _id: id },
-            { ...body, _id: id }
+    async updateSauce(sauce) {
+        await SauceModel.updateOne(
+            { _id: sauce.getId() },
+            this.convertSauceDomainToModel(sauce)
         );
-        return sauce;
     }
 
     async removeSauce(id) {
@@ -43,15 +81,17 @@ export class MongoDbSauceRepository {
 
     async likeSauce(userId, id) {
         const repoSauce = await this.getSauce(id);
-        const sauce = new Sauce(...repoSauce);
-        console.log('mongoDb to Sauce obj like: ', sauce);
-        sauce.like(userId);
+        await SauceModel.updateOne(
+            { _id: repoSauce._id },
+            this.convertSauceDomainToModel(repoSauce)
+        );
     }
 
     async dislikeSauce(userId, id) {
         const repoSauce = await this.getSauce(id);
         const sauce = new Sauce(...repoSauce);
-        console.log('mongoDb to Sauce obj like: ', sauce);
         sauce.dislike(userId);
     }
+
+    // async unlikeSauce(userId, id) {}
 }

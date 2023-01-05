@@ -20,12 +20,12 @@ schema
 export class Password {
     static saltRounds = 10;
 
-    constructor(password, hashIt = false) {
+    constructor(password, hashIt = false, isHash = false) {
         this.validate(password);
 
         const salt = bcrypt.genSaltSync(Password.saltRounds);
         this.value = hashIt ? bcrypt.hashSync(password, salt) : password;
-        this.isHash = hashIt;
+        this.isHash = hashIt || isHash;
     }
 
     // eslint-disable-next-line class-methods-use-this

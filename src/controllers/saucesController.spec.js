@@ -1,8 +1,25 @@
+/* eslint-disable no-undef */
 import request from 'supertest';
-import app from '../app';
 import { Token } from '../core/domain/valueObjects/Token';
+import { createApp } from '../app';
+import { createUserApi, createSauceApi } from '../core/api';
+// import { InMemoryUserRepository } from '../core/infrastructure/inMemoryUserRepository';
+// import { InMemorySauceRepository } from '../core/infrastructure/inMemorySauceRepository';
+import { MongoDbSauceRepository } from '../core/infrastructure/mongoDbSauceRepository';
+import { MongoDbUserRepository } from '../core/infrastructure/mongoDbUserRepository';
 
 describe('Sauce tests', () => {
+    let app;
+    beforeEach(() => {
+        // app = createApp(
+        //     createUserApi(new InMemoryUserRepository()),
+        //     createSauceApi(new InMemorySauceRepository())
+        // );
+        app = createApp(
+            createUserApi(new MongoDbUserRepository()),
+            createSauceApi(new MongoDbSauceRepository())
+        );
+    });
     describe('token authentication', () => {
         it('responds with an error if trying to add a sauce without being authenticated', async () => {
             const response = await request(app)
@@ -42,7 +59,10 @@ describe('Sauce tests', () => {
             token = new Token(userId);
         });
         it('responds with json', async () => {
-            // console.log('test valid token: ', token.value);
+            app = createApp(
+                createUserApi(new MongoDbUserRepository()),
+                createSauceApi(new MongoDbSauceRepository())
+            );
             const response = await request(app)
                 .get('/api/sauces')
                 .set('Authorization', `Bearer ${token.value}`);
@@ -89,6 +109,14 @@ describe('Sauce tests', () => {
                 .set('Authorization', `Bearer ${token.value}`);
 
             expect(response.status).toBe(500);
+            expect(response.body.message).toBe('No sauce found with this id');
+        });
+        it('should respond json when the id is valid', async () => {
+            const response = await request(app)
+                .get('/api/sauces/638a86e8e6d6f930618a93d8')
+                .set('Authorization', `Bearer ${token.value}`);
+
+            expect(response.status).toBe(200);
             expect(response.body.message).toBe('No sauce found with this id');
         });
     });

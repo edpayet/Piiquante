@@ -1,4 +1,3 @@
-import { Sauce } from '../../entities/Sauce';
 import { Result } from '../../../../util/result';
 
 export class GetSauces {

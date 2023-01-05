@@ -14,7 +14,7 @@ export class Login {
             const userFound = await this.userRepository.findUserByEmail(
                 verifiedEmail
             );
-            if (userFound === undefined) {
+            if (!userFound) {
                 console.log('no user found with this email');
                 return Result.failure(
                     new Error('The email/password pair is not correct')

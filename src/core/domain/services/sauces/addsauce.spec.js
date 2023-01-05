@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 import { AddSauce } from './addsauce';
 import { Sauce } from '../../entities/Sauce';
 import { InMemorySauceRepository } from '../../../infrastructure/inMemorySauceRepository';

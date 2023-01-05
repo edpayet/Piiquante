@@ -26,6 +26,7 @@ export class RemoveSauce {
                     )
                 );
             await this.sauceRepository.removeSauce(id);
+            return Result.success('Sauce removed');
         } catch (error) {
             console.log(error);
             return Result.failure(error);
