@@ -7,7 +7,9 @@ import { GetSauce } from './domain/services/sauces/getsauce';
 import { AddSauce } from './domain/services/sauces/addsauce';
 import { UpdateSauce } from './domain/services/sauces/updatesauce';
 import { RemoveSauce } from './domain/services/sauces/removesauce';
-import { VoteSauce } from './domain/services/sauces/votesauce';
+import { LikeSauce } from './domain/services/sauces/likesauce';
+import { DislikeSauce } from './domain/services/sauces/dislikesauce';
+import { UnlikeSauce } from './domain/services/sauces/unlikesauce';
 // import { InMemorySauceRepository } from './infrastructure/inMemorySauceRepository';
 // import { MongoDbSauceRepository } from './infrastructure/mongoDbSauceRepository';
 
@@ -26,7 +28,9 @@ export function createSauceApi(sauceRepository) {
     const addSauce = new AddSauce(sauceRepository);
     const updateSauce = new UpdateSauce(sauceRepository);
     const removeSauce = new RemoveSauce(sauceRepository);
-    const voteSauce = new VoteSauce(sauceRepository);
+    const likeSauce = new LikeSauce(sauceRepository);
+    const dislikeSauce = new DislikeSauce(sauceRepository);
+    const unlikeSauce = new UnlikeSauce(sauceRepository);
 
     return {
         getSauce,
@@ -34,6 +38,8 @@ export function createSauceApi(sauceRepository) {
         addSauce,
         updateSauce,
         removeSauce,
-        voteSauce,
+        likeSauce,
+        dislikeSauce,
+        unlikeSauce,
     };
 }

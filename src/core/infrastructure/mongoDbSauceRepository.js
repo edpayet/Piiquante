@@ -9,7 +9,7 @@ const SauceModel = require('./models/sauce');
 export class MongoDbSauceRepository {
     convertSauceModelToDomain(sauceModel) {
         return new Sauce({
-            id: sauceModel._id,
+            id: sauceModel.id.toString(),
             userId: sauceModel.userId,
             name: sauceModel.name,
             manufacturer: sauceModel.manufacturer,
@@ -18,7 +18,7 @@ export class MongoDbSauceRepository {
             imageUrl: sauceModel.imageUrl,
             heat: sauceModel.heat,
             likes: sauceModel.likes,
-            dislikes: sauceModel.disLikes,
+            dislikes: sauceModel.dislikes,
             usersLiked: sauceModel.usersLiked,
             usersDisliked: sauceModel.usersDisliked,
         });
@@ -34,7 +34,7 @@ export class MongoDbSauceRepository {
             imageUrl: sauce.getImageUrl(),
             heat: sauce.getHeat(),
             likes: sauce.getLikes(),
-            disLikes: sauce.getDislikes(),
+            dislikes: sauce.getDislikes(),
             usersLiked: sauce.getUsersLiked(),
             usersDisliked: sauce.getUsersDisliked(),
         };
@@ -51,8 +51,8 @@ export class MongoDbSauceRepository {
     async getSauce(id) {
         if (!mongoose.Types.ObjectId.isValid(id)) return null;
         const sauceModel = await SauceModel.findOne({ _id: id });
+        console.log('mongoDb getSauce: ', sauceModel);
         const sauce = this.convertSauceModelToDomain(sauceModel);
-        console.log('mongoDb getSauce: ', sauce);
         return sauce;
     }
 
@@ -81,17 +81,22 @@ export class MongoDbSauceRepository {
 
     async likeSauce(userId, id) {
         const repoSauce = await this.getSauce(id);
-        await SauceModel.updateOne(
-            { _id: repoSauce._id },
-            this.convertSauceDomainToModel(repoSauce)
-        );
+        const sauce = this.convertSauceModelToDomain(repoSauce);
+        sauce.like(userId);
+        await this.updateSauce(sauce);
     }
 
     async dislikeSauce(userId, id) {
         const repoSauce = await this.getSauce(id);
-        const sauce = new Sauce(...repoSauce);
+        const sauce = this.convertSauceModelToDomain(repoSauce);
         sauce.dislike(userId);
+        await this.updateSauce(sauce);
     }
 
-    // async unlikeSauce(userId, id) {}
+    async unlikeSauce(userId, id) {
+        const repoSauce = await this.getSauce(id);
+        const sauce = this.convertSauceModelToDomain(repoSauce);
+        sauce.unlike(userId);
+        await this.updateSauce(sauce);
+    }
 }

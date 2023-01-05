@@ -9,7 +9,7 @@ export class Sauce {
         description = '',
         mainPepper = '',
         imageUrl = '',
-        heat = 0,
+        heat = 1,
         likes = 0,
         dislikes = 0,
         usersLiked = [],
@@ -26,7 +26,7 @@ export class Sauce {
         this.description = description;
         this.mainPepper = mainPepper;
         this.imageUrl = imageUrl;
-        this.heat = heat;
+        this.heat = this.validateHeat(heat);
         this.likes = likes;
         this.dislikes = dislikes;
         this.usersLiked = usersLiked;
@@ -63,6 +63,13 @@ export class Sauce {
 
     getHeat() {
         return this.heat;
+    }
+
+    // eslint-disable-next-line class-methods-use-this
+    validateHeat(heat) {
+        if (!Number.isInteger(heat) || heat < 1) return 1;
+        if (heat > 10) return 10;
+        return heat;
     }
 
     getLikes() {
@@ -115,7 +122,6 @@ export class Sauce {
         return this.usersDisliked;
     }
 
-    // To create a Sauce, it needs at least a userID, the rest is initialized
     static create(props) {
         const id = nanoid();
         return new Sauce({ id, ...props });

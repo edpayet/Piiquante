@@ -59,10 +59,6 @@ describe('Sauce tests', () => {
             token = new Token(userId);
         });
         it('responds with json', async () => {
-            app = createApp(
-                createUserApi(new MongoDbUserRepository()),
-                createSauceApi(new MongoDbSauceRepository())
-            );
             const response = await request(app)
                 .get('/api/sauces')
                 .set('Authorization', `Bearer ${token.value}`);

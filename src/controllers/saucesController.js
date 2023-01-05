@@ -1,3 +1,4 @@
+/* eslint-disable no-return-await */
 import status from 'http-status';
 
 export function createSaucesController({
@@ -6,7 +7,9 @@ export function createSaucesController({
     addSauce,
     updateSauce,
     removeSauce,
-    voteSauce,
+    unlikeSauce,
+    likeSauce,
+    dislikeSauce,
 }) {
     const getAll = async (req, res) => {
         try {
@@ -126,13 +129,35 @@ export function createSaucesController({
         }
     };
 
+    async function chooseVote({ userId, id, vote }) {
+        if (vote === 0) {
+            return await unlikeSauce.execute(userId, id);
+        }
+        if (vote > 0) {
+            return await likeSauce.execute(userId, id);
+        }
+        return await dislikeSauce.execute(userId, id);
+    }
+
     const voteOne = async (req, res) => {
         try {
             const { id } = req.params;
             const { userId } = req.auth;
             const { like } = req.body;
 
-            const result = await voteSauce.execute(userId, id, like);
+            if (like === null || like === undefined) {
+                res.status(500).json({
+                    message: 'A like value is needed',
+                });
+            }
+            if (!Number.isInteger(like)) {
+                res.status(500).json({
+                    message: 'The like value needs to be an integer',
+                });
+            }
+
+            const result = await chooseVote({ userId, id, vote: like });
+
             if (result.isError()) {
                 res.status(500).json({ message: result.error.message });
                 return;
