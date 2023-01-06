@@ -9,6 +9,7 @@ export class InMemorySauceRepository {
 
     getSauce(id) {
         const sauceToGet = this.sauces.find((sauce) => sauce.getId() === id);
+        if (!sauceToGet) return null;
         return sauceToGet;
     }
 
@@ -25,7 +26,9 @@ export class InMemorySauceRepository {
 
     removeSauce(id) {
         const sauceToRemove = this.sauces.find((sauce) => sauce.getId() === id);
+        if (!sauceToRemove) return false;
         this.sauces.splice(this.sauces.indexOf(sauceToRemove), 1);
+        return true;
     }
 
     unlikeSauce(userId, id) {

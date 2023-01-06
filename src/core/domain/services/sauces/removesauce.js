@@ -25,7 +25,11 @@ export class RemoveSauce {
                         'This user is not authorized to remove this sauce'
                     )
                 );
-            await this.sauceRepository.removeSauce(id);
+            if (!(await this.sauceRepository.removeSauce(id))) {
+                return Result.failure(
+                    new Error(`Could not remove the sauce with id: ${id}`)
+                );
+            }
             return Result.success('Sauce removed');
         } catch (error) {
             console.log(error);

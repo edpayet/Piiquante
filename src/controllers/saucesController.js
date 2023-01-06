@@ -15,6 +15,7 @@ export function createSaucesController({
         try {
             const result = await getSauces.execute();
             if (result.isError()) {
+                console.log(result.error);
                 res.status(500).json({ message: result.error.message });
                 return;
             }
@@ -33,6 +34,7 @@ export function createSaucesController({
             const { id } = req.params;
             const result = await getSauce.execute(id);
             if (result.isError()) {
+                console.log(result.error);
                 res.status(500).json({ message: result.error.message });
                 return;
             }
@@ -62,6 +64,7 @@ export function createSaucesController({
                 )}/images/${filename}`,
             });
             if (result.isError()) {
+                console.log(result.error);
                 res.status(500).json({ message: result.error.message });
                 return;
             }
@@ -91,11 +94,17 @@ export function createSaucesController({
             const { userId } = req.auth;
             const { id } = req.params;
 
-            await updateSauce.execute({
+            const result = await updateSauce.execute({
                 ...sauceObject,
                 userId,
                 id,
             });
+
+            if (result.isError()) {
+                console.log(result.error);
+                res.status(500).json({ message: result.error.message });
+                return;
+            }
             res.status(status.CREATED).json({
                 message: 'Sauce updated',
             });
@@ -115,6 +124,7 @@ export function createSaucesController({
 
             const result = await removeSauce.execute(id, userId);
             if (result.isError()) {
+                console.log(result.error);
                 res.status(500).json({ message: result.error.message });
                 return;
             }
@@ -159,6 +169,7 @@ export function createSaucesController({
             const result = await chooseVote({ userId, id, vote: like });
 
             if (result.isError()) {
+                console.log(result.error);
                 res.status(500).json({ message: result.error.message });
                 return;
             }

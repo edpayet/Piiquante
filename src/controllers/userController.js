@@ -6,6 +6,7 @@ export function createUserController({ signUpUser, logInUser }) {
             const { email, password } = req.body;
             const result = await signUpUser.execute(email, password);
             if (result.isError()) {
+                console.log(result.error);
                 res.status(500).json({ message: result.error.message });
                 return;
             }
@@ -21,6 +22,7 @@ export function createUserController({ signUpUser, logInUser }) {
         const { email, password } = req.body;
         const result = await logInUser.execute(email, password);
         if (result.isError()) {
+            console.log(result.error);
             res.status(500).json({ message: result.error.message });
             return;
         }

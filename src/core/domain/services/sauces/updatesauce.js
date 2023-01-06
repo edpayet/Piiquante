@@ -9,7 +9,7 @@ export class UpdateSauce {
         this.sauceRepository = sauceRepository;
     }
 
-    async execute({ id, userId, ...props } = {}) {
+    async execute({ id, userId, imageUrl, ...props } = {}) {
         try {
             if (!id)
                 return Result.failure(
@@ -32,12 +32,13 @@ export class UpdateSauce {
             const usersDisliked = sauceToUpdate.getUsersDisliked();
 
             const sauce = new Sauce({
-                id,
+                _id: id,
                 userId,
                 likes,
                 dislikes,
                 usersLiked,
                 usersDisliked,
+                imageUrl: imageUrl || sauceToUpdate.getImageUrl(),
                 ...props,
             });
 

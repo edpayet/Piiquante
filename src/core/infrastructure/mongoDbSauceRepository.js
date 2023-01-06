@@ -9,7 +9,7 @@ const SauceModel = require('./models/sauce');
 export class MongoDbSauceRepository {
     convertSauceModelToDomain(sauceModel) {
         return new Sauce({
-            _id: sauceModel.id.toString(),
+            _id: sauceModel._id.toString(),
             userId: sauceModel.userId,
             name: sauceModel.name,
             manufacturer: sauceModel.manufacturer,
@@ -42,7 +42,8 @@ export class MongoDbSauceRepository {
 
     async getSauces() {
         const saucesModels = await SauceModel.find();
-        console.log('mongoDb getSauces: ', saucesModels);
+        if (!saucesModels) return null;
+        // console.log('mongoDb getSauces: ', saucesModels);
         return saucesModels.map((sauceModel) =>
             this.convertSauceModelToDomain(sauceModel)
         );
@@ -51,7 +52,8 @@ export class MongoDbSauceRepository {
     async getSauce(id) {
         if (!mongoose.Types.ObjectId.isValid(id)) return null;
         const sauceModel = await SauceModel.findOne({ _id: id });
-        console.log('mongoDb getSauce: ', sauceModel);
+        if (!sauceModel) return null;
+        // console.log('mongoDb getSauce: ', sauceModel);
         const sauce = this.convertSauceModelToDomain(sauceModel);
         return sauce;
     }
@@ -71,8 +73,9 @@ export class MongoDbSauceRepository {
     }
 
     async removeSauce(id) {
-        const sauce = await this.getSauce(id);
-        const filename = sauce.imageUrl.split('/images/')[1];
+        const sauceModel = await this.getSauce(id);
+        if (!sauceModel) return false;
+        const filename = sauceModel.imageUrl.split('/images/')[1];
         await fs.unlink(`images/${filename}`, async () => {
             await SauceModel.deleteOne({ _id: id });
         });
