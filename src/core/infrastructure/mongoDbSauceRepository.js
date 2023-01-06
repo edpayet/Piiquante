@@ -9,7 +9,7 @@ const SauceModel = require('./models/sauce');
 export class MongoDbSauceRepository {
     convertSauceModelToDomain(sauceModel) {
         return new Sauce({
-            id: sauceModel.id.toString(),
+            _id: sauceModel.id.toString(),
             userId: sauceModel.userId,
             name: sauceModel.name,
             manufacturer: sauceModel.manufacturer,

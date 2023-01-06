@@ -1,8 +1,9 @@
+/* eslint-disable no-underscore-dangle */
 import { nanoid } from 'nanoid';
 
 export class Sauce {
     constructor({
-        id,
+        _id,
         userId,
         name = '',
         manufacturer = '',
@@ -19,7 +20,7 @@ export class Sauce {
             throw Error('A userId is needed to create a sauce');
         }
 
-        this.id = id;
+        this._id = _id;
         this.userId = userId;
         this.name = name;
         this.manufacturer = manufacturer;
@@ -34,7 +35,7 @@ export class Sauce {
     }
 
     getId() {
-        return this.id;
+        return this._id;
     }
 
     getUserId() {
@@ -123,7 +124,7 @@ export class Sauce {
     }
 
     static create(props) {
-        const id = nanoid();
-        return new Sauce({ id, ...props });
+        const _id = nanoid();
+        return new Sauce({ _id, ...props });
     }
 }
