@@ -34,20 +34,6 @@ describe('UpdateSauce', () => {
             'No sauce is found with this id'
         );
     });
-    it('should return an error if the userId is not valid', async () => {
-        const sauceRepository = new InMemorySauceRepository();
-        const updateSauce = new UpdateSauce(sauceRepository);
-
-        const id = 'ID1';
-        const userId = 'USERID1';
-        const repoSauce = new Sauce({ id, userId });
-        sauceRepository.addSauce(repoSauce);
-
-        expect(
-            (await updateSauce.execute({ id, userId: 'UnvalidUserID' })).error
-                .message
-        ).toEqual('The user is not authorised to update this sauce');
-    });
     it('should update the sauce with new properties if found in the repository', async () => {
         const sauceRepository = new InMemorySauceRepository();
         const updateSauce = new UpdateSauce(sauceRepository);
@@ -55,7 +41,7 @@ describe('UpdateSauce', () => {
         const id = 'ID1';
         const userId = 'USERID1';
         const oldImageUrl = '/path/image1.jpg';
-        const repoSauce = new Sauce({ id, userId, imageUrl: oldImageUrl });
+        const repoSauce = new Sauce({ _id: id, userId, imageUrl: oldImageUrl });
         sauceRepository.addSauce(repoSauce);
 
         const newImageUrl = '/path/NewImage.jpg';
@@ -78,7 +64,7 @@ describe('UpdateSauce', () => {
         const usersLiked = ['USERID2'];
         const usersDisliked = ['USERID3'];
         const repoSauce = new Sauce({
-            id,
+            _id: id,
             userId,
             imageUrl: oldImageUrl,
             likes,

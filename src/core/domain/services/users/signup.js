@@ -12,7 +12,6 @@ export class Signup {
             if (await this.userRepository.findUserByEmail(new Email(email))) {
                 return Result.failure(new Error('user already exists'));
             }
-            console.log('--> signup', email, password);
             const user = User.create(email, password);
             await this.userRepository.addUser(user);
             return Result.success(user);

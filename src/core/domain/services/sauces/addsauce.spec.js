@@ -1,4 +1,3 @@
-/* eslint-disable no-undef */
 import { AddSauce } from './addsauce';
 import { Sauce } from '../../entities/Sauce';
 import { InMemorySauceRepository } from '../../../infrastructure/inMemorySauceRepository';
@@ -97,7 +96,7 @@ describe('AddSauce', () => {
 
         const id = 'ID1';
         const userId = 'USERID1';
-        const sauce = new Sauce({ id, userId });
+        const sauce = new Sauce({ _id: id, userId });
 
         const result = await addSauce.execute(sauce);
         expect(result.isError()).toBeFalsy();

@@ -1,4 +1,3 @@
-/* eslint-disable no-undef */
 import { LikeSauce } from './likesauce';
 import { UnlikeSauce } from './unlikesauce';
 import { DislikeSauce } from './dislikesauce';

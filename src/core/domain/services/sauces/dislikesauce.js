@@ -16,7 +16,6 @@ export class DislikeSauce {
                 return Result.failure(new Error('DislikeSauce needs an id'));
 
             const sauce = await this.sauceRepository.getSauce(id);
-            console.log('sauce: ', sauce);
             if (!sauce)
                 return Result.failure(
                     new Error('No sauce is found with this id')

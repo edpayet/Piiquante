@@ -46,6 +46,14 @@ describe('login', () => {
         expect(user.hasPassword(new Password(password))).toBeTruthy();
         expect(token).toBeTruthy();
     });
+    it('should return an error if a there is no email', async () => {
+        const userRepository = new InMemoryUserRepository();
+        const login = new Login(userRepository);
+        const password = 'Password';
+        expect((await login.execute(password)).error.message).toEqual(
+            'email is not valid'
+        );
+    });
     it('should return an error if a the email has an invalid format', async () => {
         const userRepository = new InMemoryUserRepository();
         const login = new Login(userRepository);

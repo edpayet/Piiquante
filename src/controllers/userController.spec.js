@@ -1,4 +1,3 @@
-/* eslint-disable no-undef */
 import request from 'supertest';
 import { createApp } from '../app';
 import { createUserApi, createSauceApi } from '../core/api';
